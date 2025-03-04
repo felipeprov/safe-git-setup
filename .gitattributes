@@ -1,0 +1,5 @@
+# Files to encrypt
+.tar.gz filter=zip-crypto
+
+#Users of encryptions
+#ENCRYPTION_USERS="felipe.provenzano@ca-ifcam.fr"
