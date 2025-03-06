@@ -31,6 +31,7 @@ done
 echo "⚙ Configuring Git filters..."
 git config --local "filter.safe-git.clean" "$ENCRYPT_COMMAND"
 git config --local "filter.safe-git.smudge" "gpg --batch --yes --decrypt"
+git config --local "diff.safe-git.textconv" "gpg --batch --yes --decrypt"
 
 # Ensure .gitattributes is tracked
 git add .gitattributes
