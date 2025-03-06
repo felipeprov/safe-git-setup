@@ -22,7 +22,7 @@ for key in .git-keys/*.asc; do
 done
 
 # Generate the encryption command dynamically
-ENCRYPT_COMMAND="gpg --batch --yes --encrypt"
+ENCRYPT_COMMAND="gpg --batch --yes --encrypt  --trust-model always"
 for user in $ENCRYPTION_USERS; do
     ENCRYPT_COMMAND="$ENCRYPT_COMMAND --recipient $user"
 done
@@ -30,7 +30,7 @@ done
 # Apply Git filters dynamically
 echo "⚙ Configuring Git filters..."
 git config --local "filter.safe-git.clean" "$ENCRYPT_COMMAND"
-git config --local "filter.safe-git.smudge" "gpg --batch --yes --decrypt --trust-model always"
+git config --local "filter.safe-git.smudge" "gpg --batch --yes --decrypt"
 
 # Ensure .gitattributes is tracked
 git add .gitattributes
