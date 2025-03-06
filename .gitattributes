@@ -1,5 +1,5 @@
 # Files to encrypt
-*.tar.gz filter=zip-crypto
+*.secret filter=safe-git
 
 #Users of encryptions
 #ENCRYPTION_USERS="felipe.provenzano@ca-ifcam.fr,felipeprov@gmail.com"
