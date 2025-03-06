@@ -2,11 +2,10 @@
 
 echo "🔐 Loading encryption settings from .gitattributes..."
 
-# Extract file patterns to encrypt
-ENCRYPTED_FILES=$(grep 'filter=zip-crypto' .gitattributes | awk '{print $1}')
-
 # Extract user emails for encryption
-ENCRYPTION_USERS=$(grep 'ENCRYPTION_USERS=' .gitattributes | cut -d= -f2 | tr ',' ' ')
+ENCRYPTION_USERS=$(grep 'ENCRYPTION_USER=' .gitattributes | cut -d= -f2 | tr ',' ' ')
+
+echo "$ENCRYPTION_USERS"
 
 if [[ -z "$ENCRYPTION_USERS" ]]; then
     echo "⚠️ No encryption users found in .gitattributes! Exiting..."
@@ -25,7 +24,7 @@ done
 # Generate the encryption command dynamically
 ENCRYPT_COMMAND="gpg --batch --yes --encrypt"
 for user in $ENCRYPTION_USERS; do
-    ENCRYPT_COMMAND+=" --recipient $user"
+    ENCRYPT_COMMAND="$ENCRYPT_COMMAND --recipient $user"
 done
 
 # Apply Git filters dynamically
