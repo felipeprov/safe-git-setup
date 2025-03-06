@@ -3,7 +3,7 @@
 echo "🔐 Loading encryption settings from .gitattributes..."
 
 # Extract file patterns to encrypt
-ENCRYPTED_FILES=($(grep 'filter=zip-crypto' .gitattributes | awk '{print $1}'))
+ENCRYPTED_FILES=$(grep 'filter=zip-crypto' .gitattributes | awk '{print $1}')
 
 # Extract user emails for encryption
 ENCRYPTION_USERS=$(grep 'ENCRYPTION_USERS=' .gitattributes | cut -d= -f2 | tr ',' ' ')
@@ -18,7 +18,7 @@ echo "📥 Importing GPG public keys..."
 for key in .git-keys/*.asc; do
     if [ -f "$key" ]; then
         echo "  - Importing $key..."
-        gpg --import "$key"
+        gpg --import --trust-model always "$key" 
     fi
 done
 
@@ -30,13 +30,10 @@ done
 
 # Apply Git filters dynamically
 echo "⚙ Configuring Git filters..."
-for file in "${ENCRYPTED_FILES[@]}"; do
-    git config --local "filter.zip-crypto.clean" "$ENCRYPT_COMMAND"
-    git config --local "filter.zip-crypto.smudge" "gpg --batch --yes --decrypt"
-done
+git config --local "filter.zip-crypto.clean" "$ENCRYPT_COMMAND"
+git config --local "filter.zip-crypto.smudge" "gpg --batch --yes --decrypt"
 
 # Ensure .gitattributes is tracked
 git add .gitattributes
-git commit -m "🔐 Updated encryption settings" || echo "No changes to commit."
 
 echo "✅ Encryption setup complete!"
